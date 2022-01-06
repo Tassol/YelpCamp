@@ -42,22 +42,24 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(mongoSanitize({
-  replaceWith: '_'
-}))
+app.use(
+  mongoSanitize({
+    replaceWith: '_',
+  })
+);
 const secret = process.env.SECRET || 'hehehe';
 
-const store = MongoStore.create ({
+const store = MongoStore.create({
   mongoUrl: dbUrl,
   touchAfter: 24 * 60 * 60,
-  crypto:{
+  crypto: {
     secret,
-  }
+  },
 });
 
-store.on("error",function (e){
-  console.log("Session store error", e)
-})
+store.on('error', function (e) {
+  console.log('Session store error', e);
+});
 
 const sessionConfig = {
   store,
@@ -74,7 +76,7 @@ const sessionConfig = {
 };
 app.use(session(sessionConfig));
 app.use(flash());
-app.use(helmet({contentSecurityPolicy: false}));
+app.use(helmet({ contentSecurityPolicy: false }));
 
 app.use(passport.initialize());
 app.use(passport.session());
