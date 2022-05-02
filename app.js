@@ -13,7 +13,7 @@ const methodOverride = require('method-override');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
 const User = require('./models/user');
-const helmet = require('helmet');
+const cors = require('cors');
 
 const mongoSanitize = require('express-mongo-sanitize');
 
@@ -34,6 +34,7 @@ db.once('open', () => {
 });
 
 const app = express();
+app.use(cors({credentials: true}));
 
 app.engine('ejs', ejsMate);
 app.set('view engine', 'ejs');
@@ -47,6 +48,7 @@ app.use(
     replaceWith: '_',
   })
 );
+
 const secret = process.env.SECRET || 'hehehe';
 
 const store = MongoStore.create({
@@ -69,15 +71,12 @@ const sessionConfig = {
   saveUninitialized: true,
   cookie: {
     httpOnly: true,
-    // secure: true,
     expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
     maxAge: 1000 * 60 * 60 * 24 * 7,
   },
 };
 app.use(session(sessionConfig));
 app.use(flash());
-app.use(helmet({ contentSecurityPolicy: false }));
-
 app.use(passport.initialize());
 app.use(passport.session());
 passport.use(new LocalStrategy(User.authenticate()));
@@ -114,3 +113,5 @@ const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`Serving on port ${port}`);
 });
+
+
