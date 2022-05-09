@@ -8,4 +8,4 @@ Powered by express.js and mongoDB.
 
 Run `npm install` to prepare dependencies.
 
-Run `npm run start` for a dev server. Navigate to `http://localhost:3000/`.
+Run `npm run start` for a dev server. Navigate to `http://localhost:3000/` or `https://floating-cove-94312.herokuapp.com/campgrounds`.
